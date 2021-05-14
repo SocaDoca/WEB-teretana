@@ -1,0 +1,25 @@
+.simpleLogin form {
+  max-width: 400px;
+  margin: auto;
+  background:#fefefd;
+  box-shadow: 0 10px 10px #222;
+}
+.simpleLogin form fieldset {
+    border: 0 none;
+    margin: 5px;
+    padding: 20px;
+}
+.simpleLogin form legend,
+.simpleLogin form fieldset input {
+  font-family: Open Sans;
+  font-size:15px;
+    margin: 5px;
+}
+.simpleLogin form legend {
+    background-color: #8fc400;
+    border-top: 0 none;
+    color: white;
+    display: table-cell;
+    padding: 10px 20px;
+    width: auto;
+}

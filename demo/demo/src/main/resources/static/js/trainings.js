@@ -1,6 +1,6 @@
 function sortTable(n) {
     var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
-    table = document.getElementById("Training");
+    table = document.getElementById("Trainings");
     switching = true;
     dir = "asc";
     var thead=document.getElementById("th"+n);
@@ -69,8 +69,8 @@ function filterData(trainingsDTO)
     if(trainingname!="")
         filter["name"]=trainingname;
 
-    if(type!="Genre")
-        filter["genre"]=type;
+    if(type!="Type")
+        filter["type"]=type;
 
 
     if(rating!="")

@@ -35,10 +35,6 @@ public class Training implements Serializable {
     @OneToMany(mappedBy = "training", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private  Set<Schedule> schedules = new HashSet<>();
 
-    @ManyToOne(fetch=FetchType.LAZY,cascade=CascadeType.ALL)
-    private User trainer;
-
-
 
     public Training(Long id, String name, String description, String type, Long duration, double rating  ) {
         this.id = id;
@@ -117,11 +113,4 @@ public class Training implements Serializable {
         this.doneTrainings = doneTrainings;
     }
 
-    public User getTrainer() {
-        return trainer;
-    }
-
-    public void setTrainer(User trainer) {
-        this.trainer = trainer;
-    }
 }

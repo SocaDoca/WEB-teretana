@@ -159,7 +159,7 @@ public class UserController {
         Gym gym=user.getGym();
         model.addAttribute("gym", gym);
         model.addAttribute("user",user);
-        return "trainer_gym.html";
+        return "admin_gym.html";
     }
     @DeleteMapping("/delete_room/{gym_id}/room/{room_id}")
     public ResponseEntity<?> delete_room(@PathVariable(name = "gym_id") Long cinema_id,@PathVariable(name = "room_id") Long room_id) {

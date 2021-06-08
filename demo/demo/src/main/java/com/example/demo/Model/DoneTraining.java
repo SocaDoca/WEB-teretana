@@ -58,8 +58,6 @@ public class DoneTraining implements Serializable {
         this.training = training;
     }
 
-
-
     public User getMember() {
         return member;
     }

@@ -25,11 +25,12 @@ public class TrainingsDTO {
     public void setTypes(List<String> types) {
         this.types = types;
     }
+
     public TrainingsDTO(){}
 
-    public TrainingsDTO(List<Training> movies, List<String> types) {
+    public TrainingsDTO(List<Training> trainings, List<String> types) {
         super();
-        this.trainings = movies;
+        this.trainings = trainings;
         this.types = types;
     }
 }

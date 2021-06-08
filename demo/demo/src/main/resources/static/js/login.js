@@ -40,7 +40,7 @@ function login() {
 function register() {
     let email = document.getElementById('email').value;
     let name = document.getElementById('name').value;
-    let lastname = document.getElementById('lastname').value;
+    let surname = document.getElementById('surname').value;
     let phone = document.getElementById('phone_number').value;
     let password = document.getElementById('password').value;
     let password1 = document.getElementById('password1').value;
@@ -56,7 +56,7 @@ function register() {
             "email": email,
             "name": name,
             "phone_number":phone,
-            "lastname":lastname,
+            "surname":surname,
             "password":password,
             "username":username,
             "date":date,

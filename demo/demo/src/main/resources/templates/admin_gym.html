@@ -2,8 +2,8 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <script th:inline="javascript">
-    var user = /*[[${user}]]*/;
-    var gym= /*[[${gym}]]*/;
+     let user = /*[[${user}]]*/;
+     let gym= /*[[${gym}]]*/;
   </script>
   <script src="/js/login.js" type="text/javascript"></script>
   <script src="/js/auth.js" type="text/javascript"></script>
@@ -82,7 +82,7 @@
     <div class="card col-sm-6">
       <div class="row no-gutters">
         <div class="col-md-4">
-          <img class="card-img-top" src="../images/acc.png" alt="Card image cap">
+          <img class="card-img-top" src="./images/acc.png" alt="Card image cap">
           <h5 class="card-title" style="text-align:center;padding:0.75rem 0.25rem 0.25rem 0.25rem;" th:text="${user.username}"></h5>
         </div>
         <div class="col-md-8">
@@ -92,7 +92,7 @@
               <li class="list-group-item" th:text="'Lastname : ' + ${user.surname}"></li>
               <li class="list-group-item" th:text="'E-mail : ' + ${user.email}"></li>
               <li class="list-group-item" th:text="'Phone number : ' + ${user.phone_number}"></li>
-              <li class="list-group-item" th:text="'Date of creation : ' + ${user.date}"></li>
+              <li class="list-group-item" th:text="'Date of creation : ' + ${user.date_of_birth}"></li>
             </ul>
           </div>
         </div>
@@ -111,7 +111,7 @@
               <a class="nav-link" onclick="gym()">Gym</a>
             </li>
             <li class="nav-item active">
-              <a class="nav-link" onclick="edit()">Gym</a>
+              <a class="nav-link" onclick="edit()">Edit Gym</a>
             </li>
           </ul>
         </div>

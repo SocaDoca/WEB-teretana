@@ -76,7 +76,7 @@ function edit(room_id){
 }
 function gym(){
     let id=sessionStorage.getItem("id");
-    window.location.replace("/account/"+id+"/gym");
+    window.location.replace("/account/"+id+"/gyms");
 }
 function schedule(){
     let id=sessionStorage.getItem("id");

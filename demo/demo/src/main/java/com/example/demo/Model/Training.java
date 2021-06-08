@@ -1,55 +1,66 @@
 package com.example.demo.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 public class Training implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(nullable = false)
     private String name;
 
     @Column
     private String description;
 
-    @Column
+    @Column (nullable = false)
     private String type;
 
-    @Column
-    private String duration;
+    @Column (nullable = false)
+    private Long duration;
 
     @Column
     private double rating;
-
-    @OneToMany(mappedBy = "Training",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
+    @OneToMany(mappedBy = "training",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<DoneTraining> doneTrainings = new HashSet<>();
 
-    @OneToMany(mappedBy = "Training", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private  Set<ReservedTraining> reservedTraining = new HashSet<>();
+    @OneToMany(mappedBy = "training", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private  Set<Schedule> schedules = new HashSet<>();
 
     @ManyToOne(fetch=FetchType.LAZY,cascade=CascadeType.ALL)
     private User trainer;
 
-    public Training(Long id, String name, String description, String type, String duration, double rating, Set<DoneTraining> doneTrainings, Set<ReservedTraining> reservedTraining, User trainer) {
+
+
+    public Training(Long id, String name, String description, String type, Long duration, double rating  ) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.type = type;
         this.duration = duration;
         this.rating = rating;
-        this.doneTrainings = doneTrainings;
-        this.reservedTraining = reservedTraining;
-        this.trainer = trainer;
+
     }
 
     public Training() {
 
     }
 
+    public Set<Schedule> getSchedules() {
+        return schedules;
+    }
+
+    public void setSchedules(Set<Schedule> schedules) {
+        this.schedules = schedules;
+    }
     public Long getId() {
         return id;
     }
@@ -82,11 +93,11 @@ public class Training implements Serializable {
         this.type = type;
     }
 
-    public String getDuration() {
+    public Long getDuration() {
         return duration;
     }
 
-    public void setDuration(String duration) {
+    public void setDuration(Long duration) {
         this.duration = duration;
     }
 
@@ -104,14 +115,6 @@ public class Training implements Serializable {
 
     public void setDoneTrainings(Set<DoneTraining> doneTrainings) {
         this.doneTrainings = doneTrainings;
-    }
-
-    public Set<ReservedTraining> getReservedTraining() {
-        return reservedTraining;
-    }
-
-    public void setReservedTraining(Set<ReservedTraining> reservedTraining) {
-        this.reservedTraining = reservedTraining;
     }
 
     public User getTrainer() {

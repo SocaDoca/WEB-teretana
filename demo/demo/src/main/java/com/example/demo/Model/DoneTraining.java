@@ -1,8 +1,11 @@
 package com.example.demo.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.io.Serializable;
-
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 public class DoneTraining implements Serializable {
     @Id
@@ -12,20 +15,18 @@ public class DoneTraining implements Serializable {
     @Column
     private double rating;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Training Training;
+    @ManyToOne
+    private Training training;
 
-    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @JsonIgnore
+    @ManyToOne
     private User member;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private User user;
 
-    public DoneTraining(Long id, double rating, Training training, User member, User user) {
+    public DoneTraining(Long id, double rating, Training training, User member) {
         this.id = id;
         this.rating = rating;
-        this.Training = training;
-        this.user = user;
+        this.training = training;
         this.member = member;
     }
 
@@ -50,20 +51,14 @@ public class DoneTraining implements Serializable {
     }
 
     public Training getTraining() {
-        return Training;
+        return training;
     }
 
     public void setTraining(Training training) {
-        this.Training = training;
+        this.training = training;
     }
 
-    public User getUser() {
-        return user;
-    }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
 
     public User getMember() {
         return member;

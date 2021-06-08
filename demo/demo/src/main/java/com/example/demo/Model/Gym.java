@@ -1,10 +1,14 @@
 package com.example.demo.Model;
 
+import com.example.demo.DTO.GymDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 public class Gym implements Serializable {
 
@@ -18,26 +22,30 @@ public class Gym implements Serializable {
     @Column
     private String address;
 
-    @Column
-    private String phoneNum;
+    @Column(nullable=false)
+    private String phone_number;
 
     @Column(unique = true)
     private String email;
+    @JsonIgnore
+    @OneToMany(mappedBy= "gym",fetch=FetchType.EAGER, orphanRemoval = true)
+    private Set<User> trainers=new HashSet<>();
 
-    @OneToMany(mappedBy= "gym",fetch=FetchType.LAZY,cascade=CascadeType.ALL)
-    private Set<User> trainer=new HashSet<>();
-
-    @OneToMany (mappedBy= "gym",fetch=FetchType.LAZY,cascade=CascadeType.ALL)
+    @OneToMany (mappedBy= "gym",fetch=FetchType.EAGER, orphanRemoval = true,cascade=CascadeType.ALL)
     private Set<Room> rooms=new HashSet<>();
 
-    public Gym(Long id, String name, String address, String phoneNum, String email, Set<User> trainer, Set<Room> rooms) {
+    @OneToMany (mappedBy= "gym",fetch=FetchType.EAGER, orphanRemoval = true,cascade=CascadeType.ALL)
+    private Set<Schedule> schedule=new HashSet<>();
+
+    public Gym(Long id, String name, String address, String phoneNum, String email, Set<User> trainer, Set<Room> rooms , Set<Schedule> schedules) {
         this.id = id;
         this.name = name;
         this.address = address;
-        this.phoneNum = phoneNum;
+        this.phone_number = phoneNum;
         this.email = email;
-        this.trainer = trainer;
+        this.trainers = trainer;
         this.rooms = rooms;
+        this.schedule = schedules;
 
     }
 
@@ -45,8 +53,26 @@ public class Gym implements Serializable {
 
     }
 
+
+    public static Gym getGymByDTO(GymDTO gymDTO) {
+        Gym gym = new Gym();
+        gym.setAddress(gymDTO.getAddress());
+        gym.setEmail(gymDTO.getEmail());
+        gym.setName(gymDTO.getName());
+        gym.setPhone_number(gymDTO.getPhoneNum());
+        return gym;
+    }
+
     public Long getId() {
         return id;
+    }
+
+    public Set<Schedule> getSchedule() {
+        return schedule;
+    }
+
+    public void setSchedule(Set<Schedule> schedule) {
+        this.schedule = schedule;
     }
 
     public void setId(Long id) {
@@ -69,12 +95,12 @@ public class Gym implements Serializable {
         this.address = address;
     }
 
-    public String getPhoneNum() {
-        return phoneNum;
+    public String getPhone_number() {
+        return phone_number;
     }
 
-    public void setPhoneNum(String phoneNum) {
-        this.phoneNum = phoneNum;
+    public void setPhone_number(String phone_number) {
+        this.phone_number = phone_number;
     }
 
     public String getEmail() {
@@ -85,12 +111,12 @@ public class Gym implements Serializable {
         this.email = email;
     }
 
-    public Set<User> getTrainer() {
-        return trainer;
+    public Set<User> getTrainers() {
+        return trainers;
     }
 
-    public void setTrainer(Set<User> trainer) {
-        this.trainer = trainer;
+    public void setTrainers(Set<User> trainer) {
+        this.trainers = trainer;
     }
 
     public Set<Room> getRooms() {
@@ -100,4 +126,6 @@ public class Gym implements Serializable {
     public void setRooms(Set<Room> rooms) {
         this.rooms = rooms;
     }
+
+
 }

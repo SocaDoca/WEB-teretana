@@ -1,70 +1,79 @@
 package com.example.demo.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
+    @Column(unique = true , nullable = false)
     private String username;
 
-    @Column
+    @Column (nullable = false)
     private String password;
 
-    @Column
+    @Column(nullable = false)
     private String name;
 
-    @Column
+    @Column(nullable = false)
     private String surname;
 
     @Column
-    private String phone;
+    private String phone_number;
 
-    @Column (unique = true)
+    @Column (unique = true , nullable = false)
     private String email;
 
     @Column
     private String date_of_birth;
 
-    @Column
+    @Column (nullable = false)
     private Role role;
 
     @Column
     private Boolean active;
 
     @OneToMany( mappedBy = "member", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    private Set<DoneTraining> doneTrainings=new HashSet<>();
+    Set<DoneTraining> doneTrainings=new HashSet<>();
 
-    @OneToMany( mappedBy = "member", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    private Set <ReservedTraining> reservedTraining=new HashSet<>();
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "RESERVATIONS",
+    joinColumns = @JoinColumn(name = "member_id" , referencedColumnName = "id"),
+    inverseJoinColumns = @JoinColumn(name ="schedule_id" , referencedColumnName = "id"))
+    Set<Schedule> reserved_training = new HashSet<>();
 
-    @OneToMany( mappedBy = "trainer", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    private Set <Training> training=new HashSet<>();
+    public Set<Schedule> getReserved_training() {
+        return reserved_training;
+    }
 
-    @ManyToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    public void setReserved_training(Set<Schedule> reserved_training) {
+        this.reserved_training = reserved_training;
+    }
+
+    @ManyToOne( fetch = FetchType.EAGER )
     private Gym gym;
 
-    public User(Long id, String username, String password, String name, String surname, String phone, String email, String date_of_birth, Role role, Boolean active, Set<DoneTraining> doneTrainings, Set<ReservedTraining> reservedTraining, Set<Training> training, Gym gym) {
-        this.id = id;
+    public User( String username, String password, String name, String surname, String phone, String email, String date_of_birth, Role role, Boolean active,Gym gym ,Set<DoneTraining> doneTrainings,Set<Schedule> reserved_trainings)   {
         this.username = username;
         this.password = password;
         this.name = name;
         this.surname = surname;
-        this.phone = phone;
+        this.phone_number = phone;
         this.email = email;
         this.date_of_birth = date_of_birth;
         this.role = role;
         this.active = active;
         this.doneTrainings = doneTrainings;
-        this.reservedTraining = reservedTraining;
-        this.training = training;
         this.gym = gym;
+        this.reserved_training = reserved_trainings;
     }
 
     public User() {
@@ -112,12 +121,12 @@ public class User implements Serializable {
         this.surname = surname;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getPhone_number() {
+        return phone_number;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setPhone_number(String phone) {
+        this.phone_number = phone;
     }
 
     public String getEmail() {
@@ -159,23 +168,6 @@ public class User implements Serializable {
     public void setDoneTrainings(Set<DoneTraining> doneTrainings) {
         this.doneTrainings = doneTrainings;
     }
-
-    public Set<ReservedTraining> getReservedTraining() {
-        return reservedTraining;
-    }
-
-    public void setReservedTraining(Set<ReservedTraining> reservedTraining) {
-        this.reservedTraining = reservedTraining;
-    }
-
-    public Set<Training> getTraining() {
-        return training;
-    }
-
-    public void setTraining(Set<Training> training) {
-        this.training = training;
-    }
-
     public Gym getGym() {
         return gym;
     }

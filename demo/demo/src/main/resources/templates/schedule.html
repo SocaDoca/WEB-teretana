@@ -98,7 +98,7 @@
                             <li class="list-group-item" th:text="'Lastname : ' + ${user.surname}"></li>
                             <li class="list-group-item" th:text="'E-mail : ' + ${user.email}"></li>
                             <li class="list-group-item" th:text="'Phone number : ' + ${user.phone_number}"></li>
-                            <li class="list-group-item" th:text="'Date of creation : ' + ${user.date}"></li>
+                            <li class="list-group-item" th:text="'Date of creation : ' + ${user.date_of_birth}"></li>
                         </ul>
                     </div>
                 </div>
@@ -139,10 +139,10 @@
         </div>
     </div>
 
-    <div class="row justify-content-center manager">
+    <div class="row justify-content-center trainer">
         <div class="col-sm-6">
             <form>
-                <select style="margin-top:1rem"  class="custom-select mr-sm-2" id="movie">
+                <select style="margin-top:1rem"  class="custom-select mr-sm-2" id="trainer">
                     <option selected>Trainings</option>
                     <option th:each="training : ${trainings}" th:text="${training.name}" th:value="${training.id}"></option>
                 </select>

@@ -13,13 +13,27 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-public class GymController {
+public class  GymController {
 
     @Autowired
     private GymService gymService;
 
     @GetMapping("/gyms")
     public String welcome1 (Model model) {
+        List<Gym> gyms = this.gymService.findAll();
+        model.addAttribute("gyms" , gyms);
+        return "gyms.html";
+    }
+
+    @GetMapping("/getAllGyms")
+    public ResponseEntity<?> getAllGyms () {
+        List<Gym> gyms = this.gymService.findAll();
+        return new ResponseEntity<>(gyms, HttpStatus.OK);
+    }
+
+
+    @GetMapping("/account/{id}/gyms")
+        public String gymPage (Model model){
         List<Gym> gyms = this.gymService.findAll();
         model.addAttribute("gyms" , gyms);
         return "gyms.html";

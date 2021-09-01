@@ -8,14 +8,14 @@ public class TrainerDTO {
 
     private Long gym_id;
     private String name;
-    private String lastname;
+    private String surname;
     private String email;
     private String password;
     private String username;
     private String phone_number;
-    private String date;
+    private String date_of_birth;
     private Role role;
-    private boolean activity;
+    private boolean active;
     public Long getGym_id() {
         return gym_id;
     }
@@ -28,11 +28,11 @@ public class TrainerDTO {
     public void setName(String name) {
         this.name = name;
     }
-    public String getLastname() {
-        return lastname;
+    public String getSurname() {
+        return surname;
     }
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
     public String getEmail() {
         return email;
@@ -58,11 +58,11 @@ public class TrainerDTO {
     public void setPhone_number(String phone_number) {
         this.phone_number = phone_number;
     }
-    public String getDate() {
-        return date;
+    public String getDate_of_birth() {
+        return date_of_birth;
     }
-    public void setDate(String date) {
-        this.date = date;
+    public void setDate_of_birth(String date_of_birth) {
+        this.date_of_birth = date_of_birth;
     }
     public Role getRole() {
         return role;
@@ -70,10 +70,10 @@ public class TrainerDTO {
     public void setRole(Role role) {
         this.role = role;
     }
-    public boolean isActivity() {
-        return activity;
+    public boolean isActive() {
+        return active;
     }
-    public void setActivity(boolean activity) {
-        this.activity = activity;
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

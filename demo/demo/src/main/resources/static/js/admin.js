@@ -1,12 +1,12 @@
 function registerTrainer() {
     let email = document.getElementById("email1").value;
     let name = document.getElementById('name').value;
-    let lastname = document.getElementById('lastname').value;
+    let lastname = document.getElementById('surname').value;
     let phone = document.getElementById('phone_number').value;
     let password = document.getElementById('password1').value;
     let password1 = document.getElementById('password2').value;
     let username = document.getElementById('username').value;
-    let date=document.getElementById('date').value;
+    let date=document.getElementById('date_of_birth').value;
     let gym=document.getElementById('gym').value;
     let id=sessionStorage.getItem("id");
     if(password1==password){
@@ -14,16 +14,16 @@ function registerTrainer() {
             "email": email,
             "name": name,
             "phone_number":phone,
-            "lastname":lastname,
+            "surname":lastname,
             "password":password,
             "username":username,
-            "date":date,
+            "date_of_birth":date,
             "role":2,
-            "activity":true,
-            "gym_id":gym
+            "active":false,
+            "gym_id":Number.parseInt(gym)
         });
         $.ajax({
-            url: '/register-trainer',
+            url: '/create_trainer',
             dataType: 'json',
             type: 'post',
             contentType: 'application/json',
@@ -32,7 +32,7 @@ function registerTrainer() {
                 window.location.replace("/account/"+id+"/trainers");
             },
             error: function( jqXhr, textStatus, errorThrown ){
-                window.location.replace("/account/"+id+"/trainers");
+                // window.location.replace("/account/"+id+"/trainers");
             }
         });
     }else{
@@ -62,3 +62,4 @@ function deleteTrainer(trainer_id){
         }
     });
 }
+

@@ -35,15 +35,18 @@ public class Training implements Serializable {
     @OneToMany(mappedBy = "training", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private  Set<Schedule> schedules = new HashSet<>();
 
+    @Column()
+    private Long price;
 
-    public Training(Long id, String name, String description, String type, Long duration, double rating  ) {
+
+    public Training(Long id, String name, String description, String type, Long duration, double rating, Long price) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.type = type;
         this.duration = duration;
         this.rating = rating;
-
+        this.price = price;
     }
 
     public Training() {
@@ -111,6 +114,14 @@ public class Training implements Serializable {
 
     public void setDoneTrainings(Set<DoneTraining> doneTrainings) {
         this.doneTrainings = doneTrainings;
+    }
+
+    public Long getPrice() {
+        return price;
+    }
+
+    public void setPrice(Long price) {
+        this.price = price;
     }
 
 }

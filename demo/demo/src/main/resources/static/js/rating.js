@@ -24,26 +24,27 @@ function rateTraining(training_id,done_training_id){
     });
 
 }
+function showAll(user){
+    for(let i=0;i<user.doneTrainings.length;i++){
+        document.getElementById(user.doneTrainings[i].id).style.display="";
+    }
+}
 function showRated(user){
     showAll(user);
-    for(let i=0;i<user.done_traingins.length;i++){
-        if(user.done_traingins[i].rating!=0)
-            document.getElementById(user.done_traingins[i].id).style.display="";
+    for(let i=0;i<user.doneTrainings.length;i++){
+        if(user.doneTrainings[i].rating!=0)
+            document.getElementById(user.doneTrainings[i].id).style.display="";
         else
-            document.getElementById(user.done_traingins[i].id).style.display="none";
+            document.getElementById(user.doneTrainings[i].id).style.display="none";
     }
 }
 function showUnrated(user){
     showAll(user);
-    for(let i=0;i<user.done_traingins.length;i++){
-        if(user.watched_movies[i].rating==0)
-            document.getElementById(user.done_traingins[i].id).style.display="";
+    for(let i=0;i<user.doneTrainings.length;i++){
+        if(user.doneTrainings[i].rating==0)
+            document.getElementById(user.doneTrainings[i].id).style.display="";
         else
-            document.getElementById(user.done_traingins[i].id).style.display="none";
+            document.getElementById(user.doneTrainings[i].id).style.display="none";
     }
 }
-function showAll(user){
-    for(let i=0;i<user.done_traingins.length;i++){
-        document.getElementById(user.done_traingins[i].id).style.display="";
-    }
-}
+

@@ -10,6 +10,7 @@ public class TrainingsDTO {
 
     private List<String> types;
 
+
     public List<Training> getTrainings() {
         return trainings;
     }

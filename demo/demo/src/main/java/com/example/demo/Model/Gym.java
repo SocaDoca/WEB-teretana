@@ -59,7 +59,7 @@ public class Gym implements Serializable {
         gym.setAddress(gymDTO.getAddress());
         gym.setEmail(gymDTO.getEmail());
         gym.setName(gymDTO.getName());
-        gym.setPhone_number(gymDTO.getPhoneNum());
+        gym.setPhone_number(gymDTO.getPhone_number());
         return gym;
     }
 

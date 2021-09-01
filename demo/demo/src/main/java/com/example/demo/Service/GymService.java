@@ -23,8 +23,12 @@ public class GymService {
 
 
     public Gym findOne(Long id) {
-        Gym gym = this.gymRepository.findById(id).get();
-        return gym;
+        try {
+            Gym gym = this.gymRepository.findById(id).get();
+            return gym;
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     public List<Gym> findAll() {

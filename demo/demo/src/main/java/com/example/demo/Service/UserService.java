@@ -65,9 +65,11 @@ public class UserService {
     }
 
     public void cancelReservation(Long member_id, Long schedule_id) {
+
         User user = this.userRepository.findById(member_id).get();
         Schedule schedule = this.scheduleService.findOne(schedule_id);
         user.getReserved_training().remove(schedule);
+
         return;
     }
 
@@ -83,8 +85,8 @@ public class UserService {
     public void saveTrainer(TrainerDTO trainerDTO) {
         Gym gym = gymService.findOne(trainerDTO.getGym_id());
         User user = new User(trainerDTO.getUsername(), trainerDTO.getPassword(), trainerDTO.getName(),
-                trainerDTO.getLastname(), trainerDTO.getPhone_number(), trainerDTO.getEmail(), trainerDTO.getDate(),
-                trainerDTO.getRole(), trainerDTO.isActivity(), gym, null, null);
+                trainerDTO.getSurname(), trainerDTO.getPhone_number(), trainerDTO.getEmail(), trainerDTO.getDate_of_birth(),
+                trainerDTO.getRole(), trainerDTO.isActive(), gym, null, null);
         this.userRepository.save(user);
     }
     public boolean addReservation(Long member_id, Long schedule_id) {

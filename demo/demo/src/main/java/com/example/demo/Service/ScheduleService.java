@@ -45,21 +45,34 @@ public class ScheduleService {
     }
 
     public void addProjection(ScheduleDTO scheduleDTO) {
-        Schedule schedule=new Schedule();
-        Gym gym=this.gymService.findOne(scheduleDTO.getGym_id());
-        Training training=this.trainingService.findOne(scheduleDTO.getTraining_id());
-        Room room=this.roomService.findOne(scheduleDTO.getRoom_id());
-        schedule.setGym(gym);
-        schedule.setTraining(training);
-        schedule.getRooms().add(room);
-        schedule.setDay(scheduleDTO.getDay());
-        schedule.setPrice(scheduleDTO.getPrice());
-        schedule.setTime(scheduleDTO.getTime());
-        schedule.setMembers(null);
+        try {
 
-        gym.getSchedule().add(schedule);
-        room.getSchedules().add(schedule);
-        this.scheduleRepository.save(schedule);
+            Schedule schedule = new Schedule();
+
+            Gym gym = this.gymService.findOne(scheduleDTO.getGym_id());
+
+            Training training = this.trainingService.findOne(scheduleDTO.getTraining_id());
+
+            Room room = this.roomService.findOne(scheduleDTO.getRoom_id());
+            schedule.setGym(gym);
+            schedule.setTraining(training);
+            schedule.getRooms().add(room);
+            schedule.setDay(scheduleDTO.getDay());
+            schedule.setPrice(scheduleDTO.getPrice());
+            schedule.setTime(scheduleDTO.getTime());
+            schedule.setMembers(null);
+            gym.getSchedule().add(schedule);
+            room.getSchedules().add(schedule);
+
+
+            this.scheduleRepository.save(schedule);
+
+        }
+        catch (Exception e) {
+            throw e;
+        }
+
+
 
     }
 }

@@ -1,12 +1,12 @@
-function addRoom(gym_id){
-
+function addRoom(){
     var id=sessionStorage.getItem("id");
     let capacity=document.getElementById("capacity").value;
     let mark=document.getElementById("mark").value;
+    let gym_id = document.getElementById("gym").value;
     var formData = JSON.stringify({
         "mark": mark,
         "capacity": capacity,
-        "cinema_id":gym_id
+        "gym_id":gym_id
     });
     $.ajax({
         url: '/add_room',
@@ -19,7 +19,7 @@ function addRoom(gym_id){
                 alert("Something's wrong!");
             }
             else {
-                window.location.replace("/account/"+id+"/cinema");
+                window.location.reload();
             }
         }
     });
@@ -77,6 +77,10 @@ function edit(room_id){
 function gym(){
     let id=sessionStorage.getItem("id");
     window.location.replace("/account/"+id+"/gyms");
+}
+function verifyTrainer(){
+    let id=sessionStorage.getItem("id");
+    window.location.replace("/account/"+id+"/verifyTrainer");
 }
 function schedule(){
     let id=sessionStorage.getItem("id");

@@ -1,5 +1,5 @@
 function addGym() {
-    let email = document.getElementById('email').value;
+    let email = document.getElementById('email_reg').value;
     let name = document.getElementById('name').value;
     let phone = document.getElementById('phone').value;
     let address = document.getElementById('address').value;
@@ -16,7 +16,7 @@ function addGym() {
         type: 'post',
         contentType: 'application/json',
         data: formData,
-        success: function(){
+        success: function(data){
             console.log("success");
             window.location.replace("/gyms");
         },
@@ -80,4 +80,29 @@ function editGym(gym_id){
         }
     });
 
+}
+
+function getAllGyms() {
+    $.ajax({
+        url: '/getAllGyms',
+        dataType: 'json',
+        type: 'get',
+        contentType: 'application/json',
+        success: function(data){
+            let table = document.getElementById('gymsTable');
+            let tableHtml = table.innerHTML;
+            data.forEach(item => {
+                tableHtml += `<tr><td>${item.name}</td><td>${item.email}</td><td><button onClick="deleteGym(${item.id})">remove</button></td></tr>`;
+            });
+            table.innerHTML = tableHtml;
+            console.log(data);
+            // window.location.replace("/gyms");
+        },
+        error: function( jqXhr, textStatus, errorThrown ){
+            if (jqXhr.status == 409) {
+                alert("Something went wrong!");
+                return;
+            }
+        }
+    });
 }

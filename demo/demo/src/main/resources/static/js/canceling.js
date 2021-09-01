@@ -1,8 +1,14 @@
 function cancelReservation(schedule_id){
+    document.getElementById(schedule_id).style.display="none"
+
+
+    /*
     var id=sessionStorage.getItem("id");
 
+    let row =document.getElementsByTagName("tr");
+
     var formData = JSON.stringify({
-        "user_id": id,
+        "member_id": id,
         "schedule_id": schedule_id,
     });
     $.ajax({
@@ -13,10 +19,11 @@ function cancelReservation(schedule_id){
         data: formData,
         success: function(){
             window.location.replace("/account/"+id+"/reservations");
-        },
+            },
         error: function(){
-            window.location.replace("/account/"+id+"/reservations");
+            alert(err);
+            /*window.location.replace("/account/"+id+"/reservations");
         }
     });
-
+*/
 }

@@ -2,10 +2,11 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Gyms</title>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="/js/login.js" type="text/javascript"></script>
     <script src="/js/auth.js" type="text/javascript"></script>
     <script src="/js/gym.js" type="text/javascript"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" type="text/css" href="/css/index.css">
@@ -92,25 +93,25 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="gym : ${gyms}">
-                    <td th:text="${gym.name}"></td>
-                    <td th:text="${gym.address}"></td>
-                    <td th:text="${gym.phone_number}"></td>
-                    <td th:text="${gym.email}"></td>
-                    <td class="admin">
-                        <button type="button" id="delete" th:onclick="'deleteGym('+${gym.id}+')'" class="btn">
-                            <svg width="1.6em" height="1.6em" viewBox="0 0 16 16" class="bi bi-x-circle-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-4.146-3.146a.5.5 0 0 0-.708-.708L8 7.293 4.854 4.146a.5.5 0 1 0-.708.708L7.293 8l-3.147 3.146a.5.5 0 0 0 .708.708L8 8.707l3.146 3.147a.5.5 0 0 0 .708-.708L8.707 8l3.147-3.146z"/>
-                            </svg>
-                        </button>
+                    <tr th:each="gym : ${gyms}">
+                        <td th:text="${gym.name}"></td>
+                        <td th:text="${gym.address}"></td>
+                        <td th:text="${gym.phone_number}"></td>
+                        <td th:text="${gym.email}"></td>
+                        <td class="admin">
+                            <button type="button" id="delete" th:onclick="'deleteGym('+${gym.id}+')'" class="btn">
+                                <svg width="1.6em" height="1.6em" viewBox="0 0 16 16" class="bi bi-x-circle-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-4.146-3.146a.5.5 0 0 0-.708-.708L8 7.293 4.854 4.146a.5.5 0 1 0-.708.708L7.293 8l-3.147 3.146a.5.5 0 0 0 .708.708L8 8.707l3.146 3.147a.5.5 0 0 0 .708-.708L8.707 8l3.147-3.146z"/>
+                                </svg>
+                            </button>
                     </td>
-                    <td class="adimn"><button type="button" th:onclick="'edit('+${gym.id}+')'" class="btn btn-outline-secondary">Edit</button></td>
+                    <td class="admin"><button type="button" style="display: none;" th:onclick="'edit('+${gym.id}+')'" class="btn btn-outline-secondary btnTable-edit">Edit</button></td>
                 </tr>
                 <tr class="admin">
                     <td><input id="name" type="text" placeholder="Name"/></td>
                     <td><input id="address" type="text" placeholder="Address"/></td>
                     <td><input id="phone" type="text" placeholder="Phone Number"/></td>
-                    <td><input id="emailc" type="text" placeholder="E-mail"/></td>
+                    <td><input id="email_reg" type="text" placeholder="E-mail"/></td>
                     <td><button type="button" onclick="addGym()" class="btn btn-outline-secondary">Add</button></td>
                 </tr>
                 </tbody>
@@ -119,6 +120,8 @@
     </div>
 
 </main>
-
+<script>
+    isUserLoggedIn("btnTable-edit");
+</script>
 </body>
 </html>

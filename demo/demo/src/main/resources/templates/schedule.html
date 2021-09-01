@@ -2,19 +2,27 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <script th:inline="javascript">
-        var user = /*[[${user}]]*/;
-        var gym= /*[[${gym}]]*/;
-        var trainings= /*[[${trainings}]]*/;
+        /*<![CDATA[*/
+            var user = /*[[${user}]]*/;
+            var gymObj= /*[[${gym}]]*/;
+            var trainings= /*[[${trainings}]]*/;
+            var rooms = /*[[${room}]]*/;
+            var schedule = /*[[${schedules}]]*/;
+        /*]]>*/
     </script>
+
+
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+
     <script src="/js/login.js" type="text/javascript"></script>
     <script src="/js/auth.js" type="text/javascript"></script>
     <script src="/js/admin.js" type="text/javascript"></script>
     <script src="/js/room.js" type="text/javascript"></script>
     <script src="/js/schedule.js" type="text/javascript"></script>
-
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    
     <link rel="stylesheet" type="text/css" href="/css/index.css">
     <title></title>
     <script src="https://kit.fontawesome.com/705b70177f.js" crossorigin="anonymous"></script>
@@ -22,174 +30,168 @@
 </head>
 <body onload="initAcc()">
 <!-- Navigation -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
-    <div class="container">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item ">
-                    <a class="nav-link" th:href="@{/}">Home
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/gyms}">Gyms</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/trainings}">Trainings</a>
-                </li>
-                <li  class="nav-item active online">
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-user-circle"></i>
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" onclick="profile()">Profile</a>
-                            <a class="dropdown-item" href="#">Support</a>
-                            <a class="dropdown-item" onclick="logOut()">Logout</a>
-                        </div>
-                    </div>
-
-                </li>
-                <li id="offline" class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Login
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <form class="px-4 py-3" id="loginForm">
-                            <div class="form-group">
-                                <label for="email">Email address</label>
-                                <input type="text" class="form-control" id="email" placeholder="email@example.com" />
-                            </div>
-                            <div class="form-group">
-                                <label for="password">Password</label>
-                                <input type="password" class="form-control" id="password" placeholder="Password" />
-                            </div>
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="dropdownCheck"/>
-                                <label class="form-check-label" for="dropdownCheck">
-                                    Remember me
-                                </label>
-                            </div>
-                            <button type="button" onclick="login()" class="btn btn-primary">Sign in</button>
-                        </form>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" th:href="@{/register}">Don't have an account? Sign up</a>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
-
-<main>
-    <div  class="row justify-content-center online">
-        <div class="card col-sm-6">
-            <div class="row no-gutters">
-                <div class="col-md-4">
-                    <img class="card-img-top" src="/images/acc.png" alt="Card image cap">
-                    <h5 class="card-title" style="text-align:center;padding:0.75rem 0.25rem 0.25rem 0.25rem;" th:text="${user.username}"></h5>
-                </div>
-                <div class="col-md-8">
-                    <div class="card-body ">
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item" th:text="'Name : ' + ${user.name}"></li>
-                            <li class="list-group-item" th:text="'Lastname : ' + ${user.surname}"></li>
-                            <li class="list-group-item" th:text="'E-mail : ' + ${user.email}"></li>
-                            <li class="list-group-item" th:text="'Phone number : ' + ${user.phone_number}"></li>
-                            <li class="list-group-item" th:text="'Date of creation : ' + ${user.date_of_birth}"></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row justify-content-center manager">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light static-top">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
             <div class="container">
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse" id="navbarResponsive">
+                <div class="collapse navbar-collapse" id="navbarResponsive2">
                     <ul class="navbar-nav ml-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" onclick="gym()">Gym</a>
+                        <li class="nav-item ">
+                            <a class="nav-link" th:href="@{/}">Home
+                            </a>
                         </li>
-                        <li class="nav-item active">
-                            <a class="nav-link" onclick="schedule()">Make schedule</a>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/gyms}">Gyms</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/trainings}">Trainings</a>
+                        </li>
+                        <li  class="nav-item active online">
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-user-circle"></i>
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" onclick="profile()">Profile</a>
+                                    <a class="dropdown-item" href="#">Support</a>
+                                    <a class="dropdown-item" onclick="logOut()">Logout</a>
+                                </div>
+                            </div>
+
+                        </li>
+                        <li id="offline" class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Login
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <form class="px-4 py-3" id="loginForm">
+                                    <div class="form-group">
+                                        <label for="email">Email address</label>
+                                        <input type="text" class="form-control" id="email" placeholder="email@example.com" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="password">Password</label>
+                                        <input type="password" class="form-control" id="password" placeholder="Password" />
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="dropdownCheck"/>
+                                        <label class="form-check-label" for="dropdownCheck">
+                                            Remember me
+                                        </label>
+                                    </div>
+                                    <button type="button" onclick="login()" class="btn btn-primary">Sign in</button>
+                                </form>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" th:href="@{/register}">Don't have an account? Sign up</a>
+                            </div>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
-    </div>
-    <div  class="row justify-content-center manager">
-        <div class="card col-sm-6">
-            <div class="row no-gutters">
-                <div class="card-body ">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item" th:text="'Name : ' + ${gym.name}"></li>
-                        <li class="list-group-item" th:text="'Address : ' + ${gym.address}"></li>
-                        <li class="list-group-item" th:text="'E-mail : ' + ${gym.email}"></li>
-                        <li class="list-group-item" th:text="'Phone number : ' + ${gym.phone_number}"></li>
-                    </ul>
+    <main>
+        <div  class="row justify-content-center online">
+            <div class="card col-sm-6">
+                <div class="row no-gutters">
+                    <div class="col-md-4">
+                        <img class="card-img-top" src="/images/acc.png" alt="Card image cap">
+                        <h5 class="card-title" style="text-align:center;padding:0.75rem 0.25rem 0.25rem 0.25rem;" th:text="${user.username}"></h5>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body ">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item" th:text="'Name : ' + ${user.name}"></li>
+                                <li class="list-group-item" th:text="'Lastname : ' + ${user.surname}"></li>
+                                <li class="list-group-item" th:text="'E-mail : ' + ${user.email}"></li>
+                                <li class="list-group-item" th:text="'Phone number : ' + ${user.phone_number}"></li>
+                                <li class="list-group-item" th:text="'Date of creation : ' + ${user.date_of_birth}"></li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-
-    <div class="row justify-content-center trainer">
-        <div class="col-sm-6">
-            <form>
-                <select style="margin-top:1rem"  class="custom-select mr-sm-2" id="trainer">
-                    <option selected>Trainings</option>
-                    <option th:each="training : ${trainings}" th:text="${training.name}" th:value="${training.id}"></option>
-                </select>
-                <br>
-                <select  style="margin-top:1rem" class="custom-select mr-sm-2" id="room">
-                    <option selected>Rooms</option>
-                    <option th:each="room : ${training.rooms}" th:text="${room.mark}" th:value="${room.id}"></option>
-                </select>
-                <br>
-                <label for="date">Date</label>
-                <input  class="form-control mr-sm-2"  type="date" id="date"/>
-                <br>
-                <label for="time">Time</label>
-                <input class="form-control mr-sm-2"  type="text" id="time" placeholder="Format:HH:MM"/>
-                <br>
-                <label for="price">Price</label>
-                <input class="form-control mr-sm-2"  type="number" id="price" />
-                <br>
-                <button type="button" th:onclick="'AddSchedule('+${gym.id}+')'" class="btn btn-outline-secondary">Add to schedule</button>
-            </form>
+        <div class="row justify-content-center trainer">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light static-top">
+                <div class="container">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarResponsive">
+                        <ul class="navbar-nav ml-auto">
+                            <li class="nav-item active">
+                                <a class="nav-link" onclick="schedule()">Make schedule</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
         </div>
-    </div>
-    <div class="row justify-content-center trainer">
-        <div class="col-sm-6">
-            <table id="schedule" class="table table-hover">
-                <thead class="thead-dark">
-                <tr>
-                    <th>Name</th>
-                    <th>Room</th>
-                    <th>Time</th>
-                    <th>Date</th>
-                    <th>Price</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="schedule : ${gym.schedule}" th:id="${schedule.id}">
-                    <td th:text="${schedule.gym.name}"></td>
-                    <td><p th:each="room: ${schedule.rooms}" th:text="${room.mark}"></p></td>
-                    <td th:text="${schedule.time}"></td>
-                    <td th:text="${schedule.day}"></td>
-                    <td th:text="${schedule.price}"></td>
-                </tr>
-                </tbody>
-            </table>
+        <div  class="row justify-content-center trainer">
+            <div class="card col-sm-6">
+                <div class="row no-gutters">
+                    <div class="card-body ">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item" th:text="'Name : ' + ${gym.name}"></li>
+                            <li class="list-group-item" th:text="'Address : ' + ${gym.address}"></li>
+                            <li class="list-group-item" th:text="'E-mail : ' + ${gym.email}"></li>
+                            <li class="list-group-item" th:text="'Phone number : ' + ${gym.phone_number}"></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-</main>
 
+        <div class="row justify-content-center trainer">
+            <div class="col-sm-6">
+                    <select style="margin-top:1rem; "  class="custom-select mr-sm-2" id="training">
+                        <option selected>Trainings</option>
+                        <option th:each="training : ${trainings}" th:text="${training.name}" th:value="${training.id}"></option>
+                    </select>
+                    <br>
+                    <select  style="margin-top:1rem" class="custom-select mr-sm-2" id="room">
+                        <option selected>Rooms</option>
+                        <option th:each="room : ${gym.rooms}" th:text="${room.mark}" th:value="${room.id}"></option>
+                    </select>
+
+                    <div class="mt-2">
+                        <label for="date">Date</label>
+                        <input  class="form-control mr-sm-2"  type="date" id="date"/>
+                    </div>
+                    <div class="mt-2">
+                        <label for="time">Time</label>
+                        <input class="form-control mr-sm-2"  type="text" id="time" placeholder="Format:HH:MM"/>
+                    </div>
+                    <div class="mt-2">
+                        <label for="price">Price</label>
+                        <input class="form-control mr-sm-2"  type="number" id="price" />
+                    </div>
+                        <button type="button" th:onclick="AddSchedule(gymObj)" class="btn btn-outline-secondary">Add to schedule</button>
+                </form>
+                <br>
+                    <table id="schedule" class="table table-hover">
+                            <thead class="thead-dark">
+                            <tr>
+                                <th>Name</th>
+                                <th>Room</th>
+                                <th>Time</th>
+                                <th>Date</th>
+                                <th>Price</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="schedule : ${schedules}" th:id="${schedule.id}">
+                                <td th:text="${schedule.gym.name}"></td>
+                                <td><p th:each="room: ${schedule.rooms}" th:text="${room.mark}"></p></td>
+                                <td th:text="${schedule.time}"></td>
+                                <td th:text="${schedule.day}"></td>
+                                <td th:text="${schedule.price}"></td>
+                            </tr>
+                            </tbody>
+                    </table>
+            </div>
+        </div>
+    </main>
 </body>
 </html>

@@ -27,6 +27,5 @@ public class ReservationDTO {
         this.member_id = member_id;
         this.schedule_id = schedule_id;
     }
-    public ReservationDTO() {
-    }
+
 }

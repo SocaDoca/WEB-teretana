@@ -1,10 +1,8 @@
 package com.example.demo.Controller;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import com.example.demo.DTO.*;
-import com.example.demo.Model.Gym;
-import com.example.demo.Model.Room;
-import com.example.demo.Model.Training;
-import com.example.demo.Model.User;
+import com.example.demo.Model.*;
 import com.example.demo.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -28,6 +27,9 @@ public class UserController {
     private TrainingService trainingService;
     @Autowired
     private ScheduleService scheduleService;
+    @Autowired
+    private DoneTrainingsService doneTrainService;
+
 
 
     @GetMapping("/register")
@@ -37,9 +39,11 @@ public class UserController {
 
     @PostMapping("/register-user")
     public ResponseEntity<?> register_user(@RequestBody User user) {
+        List<User> verifyUser = new ArrayList<>();
         User user1;
         try {
             user1=userService.save(user);
+            verifyUser.add(user1);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
@@ -55,12 +59,29 @@ public class UserController {
     @GetMapping("/account/{id}/done_trainings")
     public String done_trainings(@PathVariable(name = "id") Long id,Model model) {
         User user=this.userService.findOne(id);
+        List<DoneTraining> trainingAll =this.doneTrainService.findAll();
         model.addAttribute("user", user);
+        model.addAttribute("done_training", trainingAll);
         return "done_trainings.html";
     }
+
+    @GetMapping("/getAllDoneTrainings")
+    public ResponseEntity<?> getDoneTrainings(){
+        try {
+            List<DoneTraining> trainingAll =this.doneTrainService.findAll();
+            return new ResponseEntity<>(trainingAll,HttpStatus.OK);
+            }
+        catch (Exception e){
+            return new ResponseEntity<>(e,HttpStatus.CONFLICT);
+        }
+
+    }
+
+
     @GetMapping("/account/{id}/reservations")
     public String reservations(@PathVariable(name = "id") Long id,Model model) {
         User user=this.userService.findOne(id);
+        List<Schedule> schedules = this.scheduleService.findAll();
         model.addAttribute("user", user);
         return "reservations.html";
     }
@@ -79,6 +100,9 @@ public class UserController {
         if(!(this.userService.login(userDTO, user))) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+        if(user.getActive() == false) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity<User>(user, HttpStatus.OK);
     }
 
@@ -88,7 +112,7 @@ public class UserController {
             this.userService.RateIt(ratingDTO.getRating(), ratingDTO.getTraining_id(),ratingDTO.getDone_training_id());
             return new ResponseEntity<>(HttpStatus.OK);
         }catch(Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e,HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -98,7 +122,7 @@ public class UserController {
             this.userService.cancelReservation(reservationDTO.getMember_id(),reservationDTO.getSchedule_id());
             return new ResponseEntity<>(HttpStatus.OK);
         }catch(Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e,HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -106,19 +130,20 @@ public class UserController {
     public String trainers(@PathVariable(name = "id") Long id,Model model) {
         List<User> members=this.userService.getTrainers();
         User user=this.userService.findOne(id);
-        model.addAttribute("trainers", members);
+        model.addAttribute("trainersObj", members);
         model.addAttribute("user",user);
         return "trainers.html";
     }
 
     @GetMapping("/account/{id}/register_trainer")
     public String register_trainer(@PathVariable(name = "id") Long id,Model model) {
-        List<Gym> gym=this.gymService.findAll();
+        List<Gym> gyms=this.gymService.findAll();
         User user=this.userService.findOne(id);
-        model.addAttribute("gym", gym);
+        model.addAttribute("gyms", gyms);
         model.addAttribute("user",user);
         return "register_trainer.html";
     }
+
     @DeleteMapping("/remove_trainer/{id}")
     public ResponseEntity<?> remove_trainer(@PathVariable(name = "id") Long id) {
         try{
@@ -161,6 +186,16 @@ public class UserController {
         model.addAttribute("user",user);
         return "admin_gym.html";
     }
+
+    @GetMapping("/rooms")
+    public String room (Model model) {
+        List<Room> rooms = this.roomService.findAll();
+        List<Gym> gyms = this.gymService.findAll();
+        model.addAttribute("rooms" , rooms);
+        model.addAttribute("gyms" , gyms    );
+        return "rooms.html";
+    }
+
     @DeleteMapping("/delete_room/{gym_id}/room/{room_id}")
     public ResponseEntity<?> delete_room(@PathVariable(name = "gym_id") Long cinema_id,@PathVariable(name = "room_id") Long room_id) {
         try{
@@ -182,6 +217,7 @@ public class UserController {
         }
 
     }
+
     @PutMapping("/edit_room")
     public ResponseEntity<?> edit_room(@RequestBody Room room){
         try{
@@ -200,22 +236,53 @@ public class UserController {
     @GetMapping("/account/{id}/schedule")
     public String schedule(@PathVariable(name="id")Long id,Model model) {
         User user=this.userService.findOne(id);
-        Gym gym=user.getGym();
+        Gym gym = user.getGym();
+        List<Gym>gyms = this.gymService.findAll();
         List<Training> trainings=this.trainingService.findAll();
+        List<Schedule> schedules = this.scheduleService.findAll();
+        List<Room> rooms = this.roomService.findAll();
+        model.addAttribute("room", rooms);
         model.addAttribute("user", user);
         model.addAttribute("gym", gym);
+        model.addAttribute("gyms", gyms);
         model.addAttribute("trainings", trainings);
+        model.addAttribute("schedules", schedules);
+
         return "schedule.html";
     }
 
+
+    @GetMapping("/scheduleALL")
+    public ResponseEntity scheduleALL(){
+        try {
+            List<Schedule> scheduleDTO = this.scheduleService.findAll();
+            return new ResponseEntity(scheduleDTO, HttpStatus.OK);
+        } catch(Exception e) {
+            return new ResponseEntity(e, HttpStatus.CONFLICT);
+        }
+    }
     @PostMapping("/add_schedule")
     public ResponseEntity<?> add_schedule(@RequestBody ScheduleDTO scheduleDTO) {
         try {
+
             this.scheduleService.addProjection(scheduleDTO);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+            return new ResponseEntity<>(e,HttpStatus.CONFLICT);
         }
 
+    }
+
+
+    @GetMapping("/account/{id}/verify")
+    public ResponseEntity<?> verifyUser(@PathVariable(name = "id") Long id){
+        User user=this.userService.findOne(id);
+        if(user.getActive() == false) {
+            user.setActive(true);
+            if (this.userService.save(user) != null) {
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.CONFLICT);
     }
 }

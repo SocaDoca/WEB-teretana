@@ -102,6 +102,23 @@ function initAcc(){
         offline.style.display="none";
     }
 }
+
+function isUserLoggedIn(className) {
+    let id = sessionStorage.getItem("id");
+    let elementCollection = document.getElementsByClassName(className);
+    if(elementCollection !== null) {
+        if(id !== null && id !== '') {
+            for(let element of elementCollection) {
+                element.style.display="block";
+            }
+        } else {
+            for(let element of elementCollection) {
+                element.style.display="none";
+            }
+        }
+    }
+}
+
 function initTraining(){
 
     let id = sessionStorage.getItem("id");

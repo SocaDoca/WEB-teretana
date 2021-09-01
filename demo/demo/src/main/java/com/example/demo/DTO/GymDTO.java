@@ -7,7 +7,7 @@ public class GymDTO {
     private String address;
 
 
-    private String phoneNum;
+    private String phone_number;
 
 
     private String email;
@@ -33,13 +33,13 @@ public class GymDTO {
     }
 
 
-    public String getPhoneNum() {
-        return phoneNum;
+    public String getPhone_number() {
+        return phone_number;
     }
 
 
-    public void setPhoneNum(String phone_number) {
-        this.phoneNum = phone_number;
+    public void setPhone_number(String phone_number) {
+        this.phone_number = phone_number;
     }
 
 

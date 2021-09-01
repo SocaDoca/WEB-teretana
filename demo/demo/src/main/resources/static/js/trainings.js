@@ -1,4 +1,4 @@
-function sortTable(n) {
+function sortTable(n, isNumber) {
     var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
     table = document.getElementById("Trainings");
     switching = true;
@@ -10,17 +10,43 @@ function sortTable(n) {
         rows = table.rows;
         for (i = 1; i < (rows.length - 1); i++) {
             shouldSwitch = false;
-            x = rows[i].getElementsByTagName("TD")[n];
-            y = rows[i + 1].getElementsByTagName("TD")[n];
+            x = rows[i].getElementsByTagName("TD")[n-1];
+            y = rows[i + 1].getElementsByTagName("TD")[n-1];
             if (dir == "asc") {
-                if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-                    shouldSwitch = true;
-                    break;
+                let xStr = x.innerHTML.toLowerCase();
+                let yStr = y.innerHTML.toLowerCase();
+                if(n === 5 || n === 6) {
+                    xStr = xStr.substring(0, xStr.length-4);
+                    yStr = yStr.substring(0, yStr.length-4);
+                }
+                if(isNumber) {
+                    if(Number.parseFloat(xStr) > Number.parseFloat(yStr)) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else {
+                    if (xStr > yStr) {
+                        shouldSwitch = true;
+                        break;
+                    }
                 }
             } else if (dir == "desc") {
-                if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
-                    shouldSwitch = true;
-                    break;
+                let xStr = x.innerHTML.toLowerCase();
+                let yStr = y.innerHTML.toLowerCase();
+                if(n === 5 || n === 6) {
+                    xStr = xStr.substring(0, xStr.length-4);
+                    yStr = yStr.substring(0, yStr.length-4);
+                }
+                if(isNumber) {
+                    if(Number.parseFloat(xStr) < Number.parseFloat(yStr)) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else {
+                    if (xStr < yStr) {
+                        shouldSwitch = true;
+                        break;
+                    }
                 }
             }
         }
@@ -37,7 +63,7 @@ function sortTable(n) {
             }
         }
     }
-    for (i = 1; i <6 ; i++)
+    for (i = 1; i <7 ; i++)
     {
         var trows=document.getElementById("th"+i);
         if(i!=n)
@@ -54,105 +80,71 @@ function sortTable(n) {
 
 function filterData(trainingsDTO)
 {
-    var trainingname=document.getElementById("trainingname").value;
-    var type=document.getElementById("type").value;
-    var time=document.getElementById("time").value;
-    var rating=document.getElementById("rating").value;
-    var description=document.getElementById("description").value;
-    var price=document.getElementById("price").value;
-    var filter=[];
+    let trainingname=document.getElementById("trainingName").value;
+    let type=document.getElementById("type").value;
+    let rating=document.getElementById("rating").value;
+    let description=document.getElementById("description").value;
+    let price=document.getElementById("price").value;
+    let trainings=trainingsDTO.trainings;
+
+    for(let i=0;i<trainings.length;i++)
+    {
+        document.getElementById(trainings[i].id).style.display="none";
+    }
+    if(trainingname!="") {
+        trainings = filterNew(trainings, 'name', trainingname);
+    }
+    if(type!="Type") {
+        trainings = filterNew(trainings, 'type', type);
+    }
+
+    if(rating!="") {
+        trainings = filterNew(trainings, 'rating', rating);
+    }
+    if(description!="") {
+        trainings = filterNew(trainings, 'description', description);
+    }
+    if(price!="") {
+        trainings = filterNew(trainings, 'price', price);
+    }
+
+    if(trainings && trainings.length>0) {
+        trainings.forEach(item => {
+            document.getElementById(item.id).style.display="";
+        });
+    }
+
+
+    // if(type!="Type")
+    //     filter["type"]=type;
+    //
+    // if(rating!="")
+    //     filter["rating"]=rating;
+    //
+    // if(description!="")
+    //     filter["description"]=description;
+    //
+    // if(price!="")
+    //     filter["price"]=price;
+    //
+    // for (const [key, value] of Object.entries(filter)) {
+    //     filterOne(trainings,key,value);
+    // }
+}
+
+function resetFilter(trainingsDTO) {
     var trainings=trainingsDTO.trainings;
-    for(let i=0;i<trainings.length;i++)
-    {
-        document.getElementById(trainings[i].id).style.display="";
-    }
-    if(trainingname!="")
-        filter["name"]=trainingname;
-
-    if(type!="Type")
-        filter["type"]=type;
-
-
-    if(rating!="")
-        filter["rating"]=rating;
-
-
-    if(description!="")
-        filter["description"]=description;
-
-
-    if(price!="")
-        filter["price"]=price;
-
-
-    if(time!="")
-        filter["time"]=time;;
-    for (const [key, value] of Object.entries(filter)) {
-        filterOne(trainings,key,value);
-    }
+    trainings.forEach(item => {
+        document.getElementById(item.id).style.display="";
+    })
 }
 
-function filterOne(trainings,key,value)
-{
-    for(let i=0;i<trainings.length;i++)
-    {
-        finalFilter(trainings[i],key,value);
-    }
+function filterNew(trainings, key, value) {
+    return trainings.filter(item => {
+        return item[key] === value;
+    });
 }
 
-function finalFilter(training,key,value)
-{
-    if(document.getElementById(training.id).style.display=="none")
-    {
-        return;
-    }
-    let flag=false;
-    if(key=="price"){
-        for(let i=0;i<training.schedules.length;i++){
-            if(parseInt(value)>=training.schedules[i].price)
-                flag=true;
-        }
-    }
-    else if(key=="time"){
-        let help=value.split(":");
-        for(let i=0;i<training.schedules.length;i++)
-        {
-            let arr=training.schedules[i].time.split(":");
-            if(parseInt(help[0])>=parseInt(arr[0]))
-            {
-                if(parseInt(help[1])>=parseInt(arr[1]))
-                    flag=true;
-            }
-        }
-    }
-    else if(key=="rating"){
-        if(parseFloat(value)<=parseFloat(training.rating))
-            flag=true;
-    }else if(key=="name"){
-        if(training.name.toLowerCase().indexOf(value.toLowerCase())>-1)
-            flag=true;
-    }else if(key=="description"){
-        if(training.description.toLowerCase().indexOf(value.toLowerCase())>-1)
-            flag=true;
-    }else if(key=="type"){
-        if(value!="Type")
-        {
-            if(training.type==value)
-                flag=true;
-        }
-        else
-            flag=true;
-    }
-
-    if(flag){
-        document.getElementById(training.id).style.display="";
-    }
-    else{
-        document.getElementById(training.id).style.display="none";
-    }
-
-
-}
 
 function getTraining(id) {
     $.ajax({
@@ -171,9 +163,8 @@ function getTraining(id) {
 function reserve(schedule_id){
 
     var id=sessionStorage.getItem("id");
-
     var formData = JSON.stringify({
-        "user_id": id,
+        "member_id": id,
         "schedule_id": schedule_id,
     });
     $.ajax({

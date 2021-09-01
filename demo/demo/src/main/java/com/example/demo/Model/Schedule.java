@@ -21,7 +21,6 @@ public class Schedule implements Serializable {
     @Column
     private String time;
 
-
     @Column
     private Long price;
     @JsonIgnore
@@ -116,4 +115,18 @@ public class Schedule implements Serializable {
     }
 
     public Schedule() {}
+
+    public int compareTo(Schedule s){
+        if(s.id == this.id)
+        {
+            return 0;
+        }
+        else if(s.id > this.id){
+            return 1;
+        }
+        else {
+            return -1;
+        }
+
+    }
 }

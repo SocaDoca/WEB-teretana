@@ -21,7 +21,6 @@ public class Room implements Serializable {
     @Column
     private String mark;
 
-
     @JsonIgnore
     @ManyToOne(fetch=FetchType.EAGER)
     private Gym gym;
@@ -87,4 +86,5 @@ public class Room implements Serializable {
     public void setGym(Gym gym) {
         this.gym = gym;
     }
+
 }

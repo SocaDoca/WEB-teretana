@@ -28,6 +28,10 @@ public class ReservedTraining implements Serializable {
         this.member = member;
     }
 
+    public ReservedTraining() {
+
+    }
+
     public Long getId() {
         return id;
     }
